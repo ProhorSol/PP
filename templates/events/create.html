@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Создать мероприятие{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Создание нового мероприятия</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Название мероприятия</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Описание</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="event_type" class="form-label">Тип мероприятия</label>
+                        <select class="form-select" id="event_type" name="event_type" required>
+                            <option value="conference">Конференция</option>
+                            <option value="sports">Спортивное мероприятие</option>
+                            <option value="cultural">Культурное мероприятие</option>
+                            <option value="volunteer">Волонтёрская программа</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="event_type" class="form-label">Уровень мероприятия</label>
+                        <select class="form-select" id="event_type" name="event_type" required>
+                            <option value="conference">Международный</option>
+                            <option value="sports">Федеральный</option>
+                            <option value="cultural">Региональный</option>
+                            <option value="volunteer">Городской/Окружной/Районный</option>
+                            <option value="other">Учрежденческий</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Дата и время проведения</label>
+                        <input type="datetime-local" class="form-control" id="date" name="date" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Место проведения</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="max_participants" class="form-label">Максимальное количество участников</label>
+                        <input type="number" class="form-control" id="max_participants" name="max_participants">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="order_document" class="form-label">Приказ (PDF)</label>
+                        <input type="file" class="form-control" id="order_document" name="order_document" accept=".pdf">
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Создать мероприятие</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
