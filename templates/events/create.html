@@ -10,6 +10,7 @@
                 <h3 class="text-center">Создание нового мероприятия</h3>
             </div>
             <div class="card-body">
+                {% if current_user.role in ['admin', 'manager', 'teacher'] %}
                 <form method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Название мероприятия</label>
@@ -24,22 +25,22 @@
                     <div class="mb-3">
                         <label for="event_type" class="form-label">Тип мероприятия</label>
                         <select class="form-select" id="event_type" name="event_type" required>
-                            <option value="conference">Конференция</option>
-                            <option value="sports">Спортивное мероприятие</option>
-                            <option value="cultural">Культурное мероприятие</option>
-                            <option value="volunteer">Волонтёрская программа</option>
-                            <option value="other">Другое</option>
+                            <option value="конференция">Конференция</option>
+                            <option value="спортивное">Спортивное мероприятие</option>
+                            <option value="культурное">Культурное мероприятие</option>
+                            <option value="волонтерское">Волонтёрская программа</option>
+                            <option value="другое">Другое</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="event_type" class="form-label">Уровень мероприятия</label>
-                        <select class="form-select" id="event_type" name="event_type" required>
-                            <option value="conference">Международный</option>
-                            <option value="sports">Федеральный</option>
-                            <option value="cultural">Региональный</option>
-                            <option value="volunteer">Городской/Окружной/Районный</option>
-                            <option value="other">Учрежденческий</option>
+                        <label for="event_level" class="form-label">Уровень мероприятия</label>
+                        <select class="form-select" id="event_level" name="event_level" required>
+                            <option value="международный">Международный</option>
+                            <option value="федеральный">Федеральный</option>
+                            <option value="региональный">Региональный</option>
+                            <option value="городской">Городской/Окружной/Районный</option>
+                            <option value="учрежденческий">Учрежденческий</option>
                         </select>
                     </div>
                     
@@ -67,6 +68,11 @@
                         <button type="submit" class="btn btn-primary">Создать мероприятие</button>
                     </div>
                 </form>
+                {% else %}
+                <div class="alert alert-danger">
+                    У вас недостаточно прав для создания мероприятий.
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

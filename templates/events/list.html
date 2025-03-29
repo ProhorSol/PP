@@ -3,11 +3,25 @@
 {% block title %}Мероприятия{% endblock %}
 
 {% block content %}
+{# Словарь для перевода типов мероприятий #}
+{% set event_types = {
+    'sports': 'Спортивное',
+    'conference': 'Конференция',
+    'cultural': 'Культурное',
+    'volunteer': 'Волонтёрское',
+    'other': 'Другое',
+    'спортивное': 'Спортивное',
+    'конференция': 'Конференция',
+    'культурное': 'Культурное',
+    'волонтерское': 'Волонтёрское',
+    'другое': 'Другое'
+} %}
+
 <div class="row mb-4">
     <div class="col">
         <h2>Список мероприятий</h2>
     </div>
-    {% if current_user.is_authenticated and current_user.role in ['admin', 'manager'] %}
+    {% if current_user.is_authenticated and current_user.role in ['admin', 'manager', 'teacher'] %}
     <div class="col-auto">
         <a href="{{ url_for('events.create_event') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Создать мероприятие
@@ -26,7 +40,7 @@
             <div class="card-body">
                 <p class="card-text">{{ event.description }}</p>
                 <ul class="list-unstyled">
-                    <li><strong>Тип:</strong> {{ event.event_type }}</li>
+                    <li><strong>Тип:</strong> {{ event_types[event.event_type] if event.event_type in event_types else event.event_type }}</li>
                     <li><strong>Дата:</strong> {{ event.date.strftime('%d.%m.%Y %H:%M') }}</li>
                     <li><strong>Место:</strong> {{ event.location }}</li>
                     {% if event.max_participants %}
@@ -34,13 +48,16 @@
                     {% endif %}
                 </ul>
                 
-                {% if event.order_document %}
                 <div class="mb-3">
-                    <a href="{{ url_for('static', filename=('uploads/' + event.order_document)) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                    {% if event.order_document %}
+                    <a href="{{ url_for('events.uploaded_file', filename=event.order_document) }}" class="btn btn-sm btn-outline-primary" target="_blank">
                         <i class="fas fa-file-pdf"></i> Приказ
                     </a>
+                    {% endif %}
+                    <a href="{{ url_for('events.view_results', event_id=event.id) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-trophy"></i> Результаты события
+                    </a>
                 </div>
-                {% endif %}
             </div>
             <div class="card-footer">
                 {% if current_user.is_authenticated %}
@@ -54,6 +71,12 @@
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultModal{{ event.id }}">
                         Внести результаты
                     </button>
+                    <form action="{{ url_for('events.delete_event', event_id=event.id) }}" method="POST" class="d-inline"
+                          onsubmit="return confirm('Вы уверены, что хотите удалить это мероприятие? Это действие нельзя отменить.');">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </form>
                     {% endif %}
                 {% endif %}
             </div>
@@ -71,6 +94,15 @@
                 </div>
                 <form action="{{ url_for('events.update_result', event_id=event.id) }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="student_id" class="form-label">Студент</label>
+                            <select class="form-select" id="student_id" name="student_id" required>
+                                <option value="">Выберите студента</option>
+                                {% for student in students %}
+                                <option value="{{ student.id }}">{{ student.full_name }} ({{ student.group }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="result_place" class="form-label">Занятое место</label>
                             <input type="text" class="form-control" id="result_place" name="result_place" required>

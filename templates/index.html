@@ -10,7 +10,7 @@
         {% if current_user.is_authenticated %}
             <div class="alert alert-success">
                 <h4>Добро пожаловать, {{ current_user.username }}!</h4>
-                <p>Вы вошли как {{ current_user.role }}</p>
+                <p>Вы вошли как {% if current_user.role == 'teacher' %}преподаватель{% elif current_user.role == 'admin' %}администратор{% elif current_user.role == 'manager' %}менеджер{% elif current_user.role == 'student' %}студент{% else %}{{ current_user.role }}{% endif %}</p>
             </div>
             
             <div class="row mt-4">
